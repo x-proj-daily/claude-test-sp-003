@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw Text Viewer</title>
+    <style>
+        body {
+            background-color: #1e1e1e; /* Dark background for easy reading */
+            color: #d4d4d4;
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        #raw-container {
+            /* KEY STYLES BELOW */
+            white-space: pre;           /* Keeps all breaks and spaces */
+            font-family: 'Courier New', monospace; 
+            background: #252526;
+            padding: 15px;
+            border: 1px solid #333;
+            overflow-x: auto;          /* Scrollbar if lines are too long */
+            display: block;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Raw File Output:</h2>
+    
+    <div id="raw-container">Loading file...</div>
+
+    <script>
+        // Change 'yourfile.txt' to the actual name of your file
+        const fileName = 'yourfile.txt';
+
+        async function loadTxt() {
+            try {
+                const response = await fetch(fileName);
+                if (!response.ok) throw new Error('Could not find the file');
+                
+                const data = await response.text();
+                
+                // .textContent is vital—it prevents the browser from 
+                // trying to parse symbols inside the txt as HTML.
+                document.getElementById('raw-container').textContent = data;
+            } catch (err) {
+                document.getElementById('raw-container').textContent = "Error: " + err.message;
+            }
+        }
+
+        loadTxt();
+    </script>
+
+</body>
+</html>
